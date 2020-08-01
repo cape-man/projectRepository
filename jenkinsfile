@@ -27,32 +27,6 @@ node {
     sh label: '', script: 'mvn package'
   }
 
-   
-
-   stage('Jfrog Artifacory Upload') {
-        def server= Artifactory.server 'artifactory'
-                    def uploadSpec= """{
-                        "files": [{
-                        "pattern": "target/*.war",
-                        "target": "capstoneproject"}]
-                    }"""
-        server.upload(uploadSpec)
-        
-        }
-        
-        
-  stage('Download package from JFrog') {
-            def server= Artifactory.server 'artifactory'
-            def downloadSpec = """{
-            "files": [
-            {
-                "pattern": "capstoneproject/capstoneproject-0.0.1-SNAPSHOT.war",
-                "target": "./capstoneproject.war"
-            }
-            ]
-            }"""
-        server.download(downloadSpec)
-    }
        
  stage('Docker-Stage-Deployment') {
    sh label: '', script: 'docker-compose up -d --build'
